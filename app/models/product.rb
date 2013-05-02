@@ -46,12 +46,9 @@ class Product < ActiveRecord::Base
   end
 
   def percent_of_original
-    if category_ids.present?
-      percent_of_category = category_sales.map do |category_sale|
-        (100 - category_sale.percent_off) / BigDecimal.new('100')
-      end.inject(BigDecimal.new('1')) do |memo, percent_of_total|
-        memo = memo * percent_of_total
-        memo
+    if category_ids.present? #If it belongs to a category
+      percent_of_category = category_sales.inject(1) do |memo,i|
+        memo * ( ( 100 - i ) / 100.to_f )
       end
     end
     if category_ids.present?
@@ -62,26 +59,17 @@ class Product < ActiveRecord::Base
   end
 
   def product_sales
-    Sale.where(group: 'product').
-         where(status: 'active').
-         where(foreign_key: self.id)
+    Sale.where(group: 'product', status: 'active', foreign_key: self.id).pluck(:percent_off)
   end
 
   def percent_of_product
-    sales_products = product_sales.map do |product_sale|
-      (100 - product_sale.percent_off) / BigDecimal.new('100')
-    end
-
-    sales_products.inject(BigDecimal.new('1')) do |memo, percent_of_total|
-      memo = memo * percent_of_total
-      memo
+    sales_products = product_sales.inject(1) do |memo,i|
+      memo * ( ( 100 - i ) / 100.to_f )
     end
   end
 
   def category_sales
-    Sale.where(group: 'category')
-        .where(status: 'active')
-        .where(foreign_key: category_ids)
+    Sale.where(group: 'category', status: 'active', foreign_key: category_ids).pluck(:percent_off)
   end
 
   def thumbnail_path

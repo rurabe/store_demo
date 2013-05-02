@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130502033420) do
+ActiveRecord::Schema.define(:version => 20130502052212) do
 
   create_table "categories", :force => true do |t|
     t.string   "title"
@@ -25,6 +25,9 @@ ActiveRecord::Schema.define(:version => 20130502033420) do
     t.integer "category_id"
     t.integer "product_id"
   end
+
+  add_index "categories_products", ["category_id"], :name => "index_categories_products_on_category_id"
+  add_index "categories_products", ["product_id"], :name => "index_categories_products_on_product_id"
 
   create_table "order_items", :force => true do |t|
     t.integer  "order_id"
@@ -71,6 +74,9 @@ ActiveRecord::Schema.define(:version => 20130502033420) do
     t.datetime "updated_at",                :null => false
   end
 
+  add_index "ratings", ["product_id"], :name => "index_ratings_on_product_id"
+  add_index "ratings", ["user_id"], :name => "index_ratings_on_user_id"
+
   create_table "sales", :force => true do |t|
     t.integer  "foreign_key"
     t.integer  "percent_off", :default => 1
@@ -79,6 +85,10 @@ ActiveRecord::Schema.define(:version => 20130502033420) do
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
   end
+
+  add_index "sales", ["foreign_key"], :name => "index_sales_on_foreign_key"
+  add_index "sales", ["group"], :name => "index_sales_on_group"
+  add_index "sales", ["status"], :name => "index_sales_on_status"
 
   create_table "users", :force => true do |t|
     t.string   "email"

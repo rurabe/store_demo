@@ -13,6 +13,7 @@ gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'newrelic_rpm'
 gem 'will_paginate'
 gem 'ruby-progressbar'
+gem 'cache_digests'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -35,6 +36,7 @@ group :development, :test do
   gem 'simplecov'
   gem 'quiet_assets'
   gem 'poltergeist'
+  gem 'rack-mini-profiler'
 end
 
 group :test do

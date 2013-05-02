@@ -1,7 +1,7 @@
 module Search
   def self.filter_products(params = {})
     scope = if params[:category_id].present?
-      Category.find(params[:category_id]).products
+      Category.includes(:products).find(params[:category_id]).products
     elsif params[:search].present?
       Product.for_term(params[:search])
     else
